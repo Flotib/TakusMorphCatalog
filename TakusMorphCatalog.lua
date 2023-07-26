@@ -27,7 +27,7 @@ print("TakusMorphCatalog: Type /tmc to display the morph catalog !")
 -- end vars and settings
 
 -- TMCFrame (main)
-local TMCFrame = CreateFrame("Frame", "TMCFrame", UIParent)
+local TMCFrame = CreateFrame("Frame", "TMCFrame", UIParent) --name the frame "TMCFrame" for the table.insert
 TMCFrame:Hide()
 TMCFrame:SetFrameStrata("DIALOG")
 TMCFrame:SetWidth(WindowWidth) 
@@ -36,12 +36,7 @@ TMCFrame:SetPoint("CENTER",0,0)
 TMCFrame:SetMovable(true)
 TMCFrame:SetMinResize(400, 400)
 TMCFrame:SetClampedToScreen(true)
-TMCFrame:SetBackdrop( { 
-  bgFile = "Interface\\DialogFrame\\UI-DialogBox-Background-Dark", 
-  edgeFile = "Interface\\DialogFrame\\UI-DialogBox-Border", tile = true, tileSize = 32, edgeSize = 32, 
-  insets = { left = 11, right = 12, top = 12, bottom = 11 }
-})
-table.insert(UISpecialFrames, "TMCFrame")
+table.insert(UISpecialFrames, "TMCFrame") --this code add the "close with escape" feature
 -- end TMCFrame
 
 if Debug then
@@ -62,6 +57,14 @@ TMCFrame.Collection:SetScript("OnClick", function(self, Button, Down)
 	NumberOfColumn = MaxNumberOfColumn
 	TMCFrame.Gallery:Load(true)
 end)
+TMCFrame.Collection.Backdrop = CreateFrame("Frame", "TMCFrameBackdrop", TMCFrame, "BackdropTemplate")
+TMCFrame.Collection.Backdrop:SetAllPoints()
+TMCFrame.Collection.Backdrop.backdropInfo = { 
+  bgFile = "Interface\\DialogFrame\\UI-DialogBox-Background-Dark", 
+  edgeFile = "Interface\\DialogFrame\\UI-DialogBox-Border", tile = true, tileSize = 32, edgeSize = 32, 
+  insets = { left = 11, right = 12, top = 12, bottom = 11 }
+}
+TMCFrame.Collection.Backdrop:ApplyBackdrop()
 -- end Collection
 
 -- Mounts
@@ -101,14 +104,14 @@ TMCFrame.ModelPreview:SetScript("OnMouseDown", function(self, Button, Down)
 end)
 TMCFrame.ModelPreview:SetFrameStrata("DIALOG")
 TMCFrame.ModelPreview:SetFrameLevel(5)
---9.0.0
---TMCFrame.ModelPreview.Backdrop = CreateFrame("Frame", "TMCFrameModelPreviewBackdrop", TMCFrame.ModelPreview, "BackdropTemplate")
---TMCFrame.ModelPreview.Backdrop:SetAllPoints()
---TMCFrame.ModelPreview.Backdrop.backdropInfo = { 
-TMCFrame.ModelPreview:SetBackdrop( { 
+TMCFrame.ModelPreview.Backdrop = CreateFrame("Frame", "TMCFrameModelPreviewBackdrop", TMCFrame.ModelPreview, "BackdropTemplate")
+TMCFrame.ModelPreview.Backdrop:SetAllPoints()
+TMCFrame.ModelPreview.Backdrop.backdropInfo = { 
   bgFile = "Interface\\DialogFrame\\UI-DialogBox-Background",
   insets = { left = 11, right = 12, top = 12, bottom = 11 }
-})
+}
+TMCFrame.ModelPreview.Backdrop:ApplyBackdrop()
+
 TMCFrame.ModelPreview:SetAllPoints()
 --
 TMCFrame.ModelPreview.ModelFrame = CreateFrame("PlayerModel", nil, TMCFrame.ModelPreview)
@@ -121,10 +124,15 @@ TMCFrame.ModelPreview.ModelFrame.DisplayInfo = 0
 TMCFrame.ModelPreview.ModelFrame:SetWidth(WindowWidth / 3) 
 TMCFrame.ModelPreview.ModelFrame:SetHeight(WindowHeight / 2)
 TMCFrame.ModelPreview.ModelFrame:SetPoint("CENTER",0,0)
-TMCFrame.ModelPreview.ModelFrame:SetBackdrop( { 
+TMCFrame.ModelPreview.Backdrop = CreateFrame("Frame", "TMCFrameModelPreviewBackdrop", TMCFrame.ModelPreview, "BackdropTemplate")
+TMCFrame.ModelPreview.Backdrop:SetWidth(WindowWidth / 3)
+TMCFrame.ModelPreview.Backdrop:SetHeight(WindowHeight / 2)
+TMCFrame.ModelPreview.Backdrop:SetPoint("CENTER",0,0)
+TMCFrame.ModelPreview.Backdrop.backdropInfo = { 
   bgFile = "Interface\\FrameGeneral\\UI-Background-Marble.PNG",
   insets={bottom=-50, top=-40, left=-20, right=-20}
-})
+}
+TMCFrame.ModelPreview.Backdrop:ApplyBackdrop()
 --
 TMCFrame.ModelPreview.Favorite=TMCFrame.ModelPreview.ModelFrame:CreateTexture(nil,"ARTWORK")
 TMCFrame.ModelPreview.Favorite:SetPoint("TOPLEFT",-20,30)
@@ -241,26 +249,30 @@ TMCFrame.PageController.FontString:SetAllPoints(TMCFrame.PageController)
 
 function TMCFrame.PageController:UpdateButtons()
 	if (ModelID >= MaxModelID) then
-		TMCFrame.NextPageButton:SetBackdrop( { 
+		TMCFrame.NextPageButton.Backdrop.backdropInfo = { 
 		  bgFile = "Interface\\Buttons\\UI-SpellbookIcon-NextPage-Disabled", 
 		  insets = { left = 4, right = 4, top = 4, bottom = 4 }
-		})
+		}
+		TMCFrame.NextPageButton.Backdrop:ApplyBackdrop()
 	else
-		TMCFrame.NextPageButton:SetBackdrop( { 
+		TMCFrame.NextPageButton.Backdrop.backdropInfo = { 
 		  bgFile = "Interface\\Buttons\\UI-SpellbookIcon-NextPage-Up", 
 		  insets = { left = 4, right = 4, top = 4, bottom = 4 }
-		})
+		}
+		TMCFrame.NextPageButton.Backdrop:ApplyBackdrop()
 	end
 	if (GoBackDepth == 0) then
-		TMCFrame.PreviousPageButton:SetBackdrop( { 
+		TMCFrame.PreviousPageButton.Backdrop.backdropInfo = { 
 		  bgFile = "Interface\\Buttons\\UI-SpellbookIcon-PrevPage-Disabled", 
 		  insets = { left = 4, right = 4, top = 4, bottom = 4 }
-		})
+		}
+		TMCFrame.PreviousPageButton.Backdrop:ApplyBackdrop()
 	else
-		TMCFrame.PreviousPageButton:SetBackdrop( { 
+		TMCFrame.PreviousPageButton.Backdrop.backdropInfo = { 
 		  bgFile = "Interface\\Buttons\\UI-SpellbookIcon-PrevPage-Up", 
 		  insets = { left = 4, right = 4, top = 4, bottom = 4 }
-		})
+		}
+		TMCFrame.PreviousPageButton.Backdrop:ApplyBackdrop()
 	end	
 end
 
@@ -271,10 +283,14 @@ TMCFrame.NextPageButton = CreateFrame("Button", nil, TMCFrame.PageController)
 --
 TMCFrame.NextPageButton:SetSize(45, 45)
 TMCFrame.NextPageButton:SetPoint("Center",100,0)
-TMCFrame.NextPageButton:SetBackdrop( { 
+
+TMCFrame.NextPageButton.Backdrop = CreateFrame("Frame", "TMCFrameNextPageButtonBackdrop", TMCFrame.NextPageButton, "BackdropTemplate")
+TMCFrame.NextPageButton.Backdrop:SetAllPoints()
+TMCFrame.NextPageButton.Backdrop.backdropInfo = { 
   bgFile = "Interface\\Buttons\\UI-SpellbookIcon-NextPage-Up", 
   insets = { left = 4, right = 4, top = 4, bottom = 4 }
-})
+}
+TMCFrame.NextPageButton.Backdrop:ApplyBackdrop()
 --
 TMCFrame.NextPageButton.HoverGlow = TMCFrame.NextPageButton:CreateTexture(nil,"BACKGROUND")
 TMCFrame.NextPageButton.HoverGlow:SetTexture("Interface\\Buttons\\CheckButtonGlow")
@@ -340,10 +356,13 @@ end)
 TMCFrame.PreviousPageButton = CreateFrame("Button", nil, TMCFrame.PageController)
 TMCFrame.PreviousPageButton:SetSize(45, 45)
 TMCFrame.PreviousPageButton:SetPoint("Center",-100,0)
-TMCFrame.PreviousPageButton:SetBackdrop( { 
+TMCFrame.PreviousPageButton.Backdrop = CreateFrame("Frame", "TMCFramePreviousPageButtonBackdrop", TMCFrame.PreviousPageButton, "BackdropTemplate")
+TMCFrame.PreviousPageButton.Backdrop:SetAllPoints()
+TMCFrame.PreviousPageButton.Backdrop.backdropInfo = { 
   bgFile = "Interface\\Buttons\\UI-SpellbookIcon-PrevPage-Disabled", 
   insets = { left = 4, right = 4, top = 4, bottom = 4 }
-})
+}
+TMCFrame.PreviousPageButton.Backdrop:ApplyBackdrop()
 TMCFrame.PreviousPageButton.HoverGlow = TMCFrame.PreviousPageButton:CreateTexture(nil,"BACKGROUND")
 TMCFrame.PreviousPageButton.HoverGlow:SetTexture("Interface\\Buttons\\CheckButtonGlow")
 TMCFrame.PreviousPageButton.HoverGlow:SetAllPoints(TMCFrame.PreviousPageButton)
@@ -528,7 +547,7 @@ if Debug then
 	print("ModelFrames OK")
 end
 
--- slash commands (click on the macro or type the command to close)
+-- slash commands
 SLASH_TAKUSMORPHCATALOG1 = '/tmc'
 function SlashCmdList.TAKUSMORPHCATALOG()
 	--if (windowOpen == false) then
