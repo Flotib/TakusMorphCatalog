@@ -1,8 +1,10 @@
-# TakusMorphCatalog
+# TakusMorphCatalog (Fork)
 [WOW ADDON] An in-game model viewer for morphing
 
-Last update made on 15/11/2020 for WoW interface version 90100 (Shadowlands)
+My fork work on WoW 8.3 (I didn't check on older or recent versions of the game)
 
-You can contribute to this add-on by submitting pull requests !
+Basically it's just an improvement of life:
+* Close the window by pressing escape
+* Morph and demorph buttons added on the morph window (with "add to favorite" and "copy id")
 
-![alt text](https://i.imgur.com/SfBGjm2.jpg "Image Preview")
+![alt text](https://i.imgur.com/MOMGmFm.png "Image Preview")
